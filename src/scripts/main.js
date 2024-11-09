@@ -2,7 +2,6 @@
 
 const buttons = Array.from(document.querySelectorAll('button'));
 const tableBody = document.querySelector('.field tbody');
-const trElements = document.querySelector('tr');
 
 buttons.forEach((button) => {
   button.onclick = function (events) {
@@ -30,84 +29,84 @@ buttons.forEach((button) => {
 
 function appendRow() {
   const rowCount = tableBody.children.length;
-  const removeButton = document.querySelector('.remove-row');
-
-  if (removeButton.hasAttribute('disabled')) {
-    removeButton.removeAttribute('disabled');
-  }
+  const removeRowButton = document.querySelector('.remove-row');
+  const appendRowButton = document.querySelector('.append-row');
 
   if (rowCount < 10) {
     const tr = document.createElement('tr');
+    const trElements = document.querySelectorAll('tr');
 
-    for (let i = 0; i < trElements.children.length; i++) {
+    for (let i = 0; i < trElements[0].children.length; i++) {
       const td = document.createElement('td');
 
       tr.appendChild(td);
     }
     tableBody.appendChild(tr);
-  }
 
-  if (rowCount === 9) {
-    document.querySelector('.append-row').setAttribute('disabled', 'true');
+    if (rowCount + 1 === 10) {
+      appendRowButton.setAttribute('disabled', 'true');
+    }
+
+    removeRowButton.removeAttribute('disabled');
   }
 }
 
 function removeRow() {
   const rowCount = tableBody.children.length;
-  const appendButton = document.querySelector('.append-row');
+  const removeRowButton = document.querySelector('.remove-row');
+  const appendRowButton = document.querySelector('.append-row');
 
   if (rowCount > 2) {
     const tr = tableBody.lastChild;
 
     tableBody.removeChild(tr);
-  }
 
-  if (rowCount === 2) {
-    document.querySelector('.remove-row').setAttribute('disabled', 'true');
-  }
+    if (rowCount === 2) {
+      removeRowButton.setAttribute('disabled', 'true');
+    }
 
-  if (appendButton.hasAttribute('disabled')) {
-    appendButton.removeAttribute('disabled');
+    appendRowButton.removeAttribute('disabled');
   }
 }
 
 function appendColumn() {
-  const tr = document.querySelectorAll('tr');
-  const trLength = document.querySelector('tr').children.length;
+  const trElements = document.querySelectorAll('tr');
+  const trLength = trElements[0].children.length;
+  const appendColumnButton = document.querySelector('.append-column');
+  const removeColumnButton = document.querySelector('.remove-column');
 
-  if (trLength > 1) {
-    document.querySelector('.remove-column').removeAttribute('disabled');
+  if (trLength < 10) {
+    trElements.forEach((tr) => {
+      const td = document.createElement('td');
+
+      tr.appendChild(td);
+    });
+
+    if (trLength + 1 === 10) {
+      appendColumnButton.setAttribute('disabled', 'true');
+    }
+
+    removeColumnButton.removeAttribute('disabled');
   }
-
-  if (trLength === 9) {
-    document.querySelector('.append-column').setAttribute('disabled', 'true');
-  }
-
-  tr.forEach((elements) => {
-    const td = document.createElement('td');
-
-    elements.append(td);
-  });
 }
 
 function removeColumn() {
-  const tr = document.querySelectorAll('tr');
-  const trLength = document.querySelector('tr').children.length;
+  const trElements = document.querySelectorAll('tr');
+  const trLength = trElements[0].children.length;
   const appendColumnButton = document.querySelector('.append-column');
-
-  if (trLength === 3) {
-    document.querySelector('.remove-column').setAttribute('disabled', 'true');
-  }
-
-  if (appendColumnButton.hasAttribute('disabled')) {
-    appendColumnButton.removeAttribute('disabled');
-  }
+  const removeColumnButton = document.querySelector('.remove-column');
 
   if (trLength > 2) {
-    tr.forEach((elements) => {
-      const lastTd = elements.lastElementChild;
+    trElements.forEach((tr) => {
+      const lastTd = tr.lastElementChild;
 
-      elements.removeChild(lastTd);
+      tr.removeChild(lastTd);
     });
+
+    if (trLength - 1 === 2) {
+      removeColumnButton.setAttribute('disabled', 'true');
+    }
+
+    appendColumnButton.removeAttribute('disabled');
   }
 }
